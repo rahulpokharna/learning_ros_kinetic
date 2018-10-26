@@ -7,6 +7,9 @@ project(minimal_nodes)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs
+  actionlib_msgs
+  message_generation
+  actionlib
 )
 
 ## System dependencies are found with CMake's conventions
@@ -57,17 +60,19 @@ find_package(catkin REQUIRED COMPONENTS
 # )
 
 ## Generate actions in the 'action' folder
-# add_action_files(
-#   FILES
+ add_action_files(
+   FILES
+   minimal.action
 #   Action1.action
 #   Action2.action
-# )
+ )
 
 ## Generate added messages and services with any dependencies listed here
-# generate_messages(
-#   DEPENDENCIES
-#   std_msgs
-# )
+ generate_messages(
+   DEPENDENCIES
+   std_msgs
+   actionlib_msgs
+ )
 
 ###################################
 ## catkin specific configuration ##
@@ -81,8 +86,11 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES minimal_nodesmal_publish
-#  CATKIN_DEPENDS roscpp std_msgs
+  CATKIN_DEPENDS roscpp std_msgs
 #  DEPENDS system_lib
+  CATKIN_DEPENDS message_runtime 
+  CATKIN_DEPENDS actionlib_msgs
+  CATKIN_DEPENDS actionlib
 )
 
 ###########
@@ -107,6 +115,8 @@ add_executable(sleepy_minimal_publisher src/sleepy_minimal_publisher.cpp)
 add_executable(minimal_subscriber src/minimal_subscriber.cpp)
 add_executable(minimal_simulator src/minimal_simulator.cpp)
 add_executable(minimal_controller src/minimal_controller.cpp)
+add_executable(action_client src/action_client.cpp)
+add_executable(sin_action_server src/sin_action_server.cpp)
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
 # add_dependencies(minimal_nodes_node minimal_nodes_generate_messages_cpp)
@@ -117,6 +127,8 @@ target_link_libraries(sleepy_minimal_publisher  ${catkin_LIBRARIES} )
 target_link_libraries(minimal_subscriber  ${catkin_LIBRARIES} )
 target_link_libraries(minimal_simulator  ${catkin_LIBRARIES} )
 target_link_libraries(minimal_controller  ${catkin_LIBRARIES} )
+target_link_libraries(action_client  ${catkin_LIBRARIES} )
+target_link_libraries(sin_action_server  ${catkin_LIBRARIES} )
 #############
 ## Install ##
 #############

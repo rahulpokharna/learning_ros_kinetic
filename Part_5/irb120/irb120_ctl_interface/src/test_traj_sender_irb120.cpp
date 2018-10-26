@@ -81,12 +81,12 @@ int main(int argc, char** argv)
     
 
      //next trajectory:
-    trajectory_point1.time_from_start = ros::Duration(3.0); //3 seconds to arrive, from previous point
-    trajectory_point2.time_from_start = ros::Duration(5.0); //2 seconds to arrive, from previous point
-    trajectory_point3.time_from_start = ros::Duration(7.0); //2 seconds to arrive, from previous point
-    trajectory_point4.time_from_start = ros::Duration(9.0); //2 seconds to arrive, from previous point
-    trajectory_point5.time_from_start = ros::Duration(11.0); //2 seconds to arrive, from previous point
-    trajectory_point6.time_from_start = ros::Duration(13.0); //2 seconds to arrive, from previous point  
+    trajectory_point1.time_from_start = ros::Duration(6.0); //3 seconds to arrive, from previous point
+    trajectory_point2.time_from_start = ros::Duration(12.0); //2 seconds to arrive, from previous point
+    trajectory_point3.time_from_start = ros::Duration(18.0); //2 seconds to arrive, from previous point
+    trajectory_point4.time_from_start = ros::Duration(24.0); //2 seconds to arrive, from previous point
+    trajectory_point5.time_from_start = ros::Duration(30.0); //2 seconds to arrive, from previous point
+    trajectory_point6.time_from_start = ros::Duration(36.0); //2 seconds to arrive, from previous point  
      new_trajectory.header.stamp = ros::Time::now();
      /*
      1,1.5,0
@@ -100,9 +100,35 @@ int main(int argc, char** argv)
      trajectory_point1.positions[1] = 1.5;
      trajectory_point1.positions[2] = 0.0;
      
-     trajectory_point2.positions[0] = 0.8;
-     trajectory_point2.positions[1] = 1.3;
-     trajectory_point2.positions[2] = 0.4;
+     trajectory_point2.positions[0] = 1.0;//0.5;
+     trajectory_point2.positions[1] = 1.5;//-0.3;
+     trajectory_point2.positions[2] = 0.0;//0.75;
+     
+     trajectory_point3.positions[0] = 1.0;//0.0;
+     trajectory_point3.positions[1] = 1.5;//1.5;
+     trajectory_point3.positions[2] = 1.0;//1.0;
+     
+     trajectory_point4.positions[0] = 1.0;//-0.4;
+     trajectory_point4.positions[1] = 1.5;//-0.5;
+     trajectory_point4.positions[2] = 1.0;//0.6;
+     
+     trajectory_point5.positions[0] = 1.0;//0.2;
+     trajectory_point5.positions[1] = 1.5;//1.5;
+     trajectory_point5.positions[2] = 1.0;//0.8;
+     
+     trajectory_point6.positions[0] = 1.0;//0.0;
+     trajectory_point6.positions[1] = 1.5;//-0.5;
+     trajectory_point6.positions[2] = 1.0;//1.0;    
+     
+
+     // Old values for numbers
+     trajectory_point1.positions[0] = 1.0;
+     trajectory_point1.positions[1] = 1.5;
+     trajectory_point1.positions[2] = 0.0;
+     
+     trajectory_point2.positions[0] = 0.75;
+     trajectory_point2.positions[1] = 0.5;
+     trajectory_point2.positions[2] = 0.3;
      
      trajectory_point3.positions[0] = 0.6;
      trajectory_point3.positions[1] = 1.3;
@@ -119,7 +145,7 @@ int main(int argc, char** argv)
      trajectory_point6.positions[0] = 0.0;
      trajectory_point6.positions[1] = 1.4;
      trajectory_point6.positions[2] = 0.6;    
-     
+
      new_trajectory.points.clear();
      new_trajectory.points.push_back(trajectory_point1); // add this trajectory point to the trajectory message
      new_trajectory.points.push_back(trajectory_point2); // append another point
