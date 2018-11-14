@@ -1,9 +1,3 @@
-//example ROS client:
-// first run: rosrun example_ROS_service example_ROS_service
-// then start this node:  rosrun example_ROS_service example_ROS_client
-
-
-
 #include <ros/ros.h>
 #include <std_srvs/Trigger.h> // this message type is defined in the current package
 #include <osrf_gear/ConveyorBeltControl.h>
@@ -53,8 +47,6 @@ int main(int argc, char **argv) {
         conveyor_client.call(conveyor_srv);
         ros::Duration(0.5).sleep();
     }
-    ROS_INFO("I see a box");
-    
     ROS_INFO("got success from conveyor");
 
 
@@ -71,8 +63,6 @@ int main(int argc, char **argv) {
 	ROS_INFO("Box visible to camera");
 
 	// wait until the pos of the boz is under the camera 
-	
-	// g_cam_data.models[0].pose.position.z > -0.1 && g_cam_data.models[0].pose.position.z < 0.1
 	
 	while (abs(g_cam_data.models[0].pose.position.z) > 0.1) {
 		ROS_INFO("Waiting for box to be under camera: %f", g_cam_data.models[0].pose.position.z);	
@@ -124,5 +114,3 @@ int main(int argc, char **argv) {
     }
     ROS_INFO("Drone successfully called");
 }
-
-    
