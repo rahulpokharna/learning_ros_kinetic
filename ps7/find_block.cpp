@@ -129,12 +129,19 @@ void ImageConverter::imageCb(const sensor_msgs::ImageConstPtr& msg){
                 }
             }
         }
-        //used to check if side being evaluated is a small edge or large edge
+        //used to check if side is a small or big side
         distance = sqrt((xMin_X - yMin_X)*(xMin_X - yMin_X) + (xMin_Y - yMin_Y)*(xMin_Y - yMin_Y));
-        //used to calculate if yaw is 0 or 90 degrees
+        //used to check if needed to rotate 90 deg
         distance_x = sqrt((xMax_X - xMin_X)*(xMax_X - xMin_X) + (xMax_Y - xMin_Y)*(xMax_Y - xMin_Y));
-        angle = atan((yMin_X - xMin_X)/(yMin_Y - xMin_Y));
-        
+        ROS_INFO("Before angle calc");
+        // Add a null condition for the division
+        if((yMin_Y - xMin_Y) == 0){
+        	angle = 0;
+        }
+        else{
+        	angle = atan((yMin_X - xMin_X)/(yMin_Y - xMin_Y));
+        }
+        ROS_INFO("After angle calc");
         // CALCULATE ORIENTATION HERE
         // if distance between xmin and ymin are small, rotate the orientation 90deg
         if((distance != 0 && distance < 20) || (distance == 0 && distance_x > 20)){
@@ -179,17 +186,22 @@ void ImageConverter::imageCb(const sensor_msgs::ImageConstPtr& msg){
         double u = (i_centroid - g_central_I) * g_scale;
         double v = (j_centroid - g_central_J) * g_scale	;
         
-        // OG way
+        // OG way, used for the X value as the Y potion of this was not getting the correct value as expected
+        // Value of theta found by using a system of equations to solve, as described in the writeup
         block_pose_.pose.position.x = cos(g_theta) * u - sin(g_theta) * v + g_central_X; //not true, but legal
         //block_pose_.pose.position.y = sin(g_theta) * u - cos(g_theta) * v + g_central_Y; //not true, but legal
         
-        // New Way
+        // New Way, used for y position as the X value for this was inaccurate, like above
         //block_pose_.pose.position.x = quatX * u - quatY * v + g_central_X; //not true, but legal
         block_pose_.pose.position.y = quatY * u - quatX * v + g_central_Y; // Values obtained using the same J value to fill out the matrix
         
         //block_pose_.pose.position.y = block_pose_.pose.position.y - 2 * (g_central_Y - block_pose_.pose.position.y);
         ROS_INFO("x_r: %f; y_r: %f",block_pose_.pose.position.x,block_pose_.pose.position.y);
         double theta=g_theta; // was 0 
+        
+        // Uncomment line, but might break code sometimes. Includes orientation of block and orientation of the camera in one to make the tool pose rotate tothe new goalpos
+        theta = g_theta + angle;
+        
         
         // need camera info to fill in x,y,and orientation x,y,z,w
         //geometry_msgs::Quaternion quat_est

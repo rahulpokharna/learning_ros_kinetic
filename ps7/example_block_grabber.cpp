@@ -23,14 +23,19 @@
 #include <std_srvs/SetBool.h>
 using namespace std;
 
+// Position of block, has some default values
 double pos_x = 0.5;
 double pos_y = 0.0;
 double pos_z = 0.035;
 //double roll = 0.0, pitch = 0.0, yaw = 0.0;
+// Attempt at using msg to store the pos of the block from the message
+geometry_msgs::PoseStamped blockPose;
 bool updatePos = true;
 
+// Update value of the position, only if the flag is true, then set to false
 void callBack(const geometry_msgs::PoseStamped& msg){
   if(updatePos){  
+  	blockPose = msg;
 	pos_x = msg.pose.position.x;
 	pos_y = msg.pose.position.y;
 	//roll = msg.pose.orientation.x;
@@ -51,7 +56,7 @@ int main(int argc, char** argv) {
     CartMotionCommander cart_motion_commander;
     XformUtils xformUtils;
     ros::ServiceClient client = nh.serviceClient<std_srvs::SetBool>("/sticky_finger/link6");
-    //Subscriber to openCV node
+    //Subscriber to the block finder 
     ros::Subscriber sub = nh.subscribe("block_pose",1,callBack);
     std_srvs::SetBool srv;
     srv.request.data = true;
@@ -128,7 +133,9 @@ int main(int argc, char** argv) {
         //Move arm to just above block
         ROS_INFO("moving to approach pose"); 
         tool_pose.pose.position.x = pos_x;
-        tool_pose.pose.position.y = pos_y; 
+        tool_pose.pose.position.y = pos_y;
+        // Put the tool piece in the appropriate orientation
+        //tool_pose = blockPose; 
         tool_pose.pose.position.z = 0.05; //0.01;  
         // Here, set orientation of Z to what we get from the publisher
         //tool_pose.pose.orientation.x = roll;
@@ -177,7 +184,11 @@ int main(int argc, char** argv) {
 
 
         ROS_INFO("requesting plan to depart with grasped object:");
-        tool_pose.pose.position.z = 0.3;         
+        tool_pose.pose.position.z = 0.3;
+        
+        // Reset the gripper values
+        //tool_affine.linear() = R_gripper;
+    	//tool_affine.translation() = O_des;   
         //tool_pose.pose.orientation.x = 0.0;
         //tool_pose.pose.orientation.y = 0.0;
         //tool_pose.pose.orientation.z = 0.0;
